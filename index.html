@@ -342,7 +342,7 @@
 // Penilaian Form Handler
 document.getElementById('penilaianForm').addEventListener('submit', async function(e) {
   e.preventDefault();
-  
+
   const selectedTeknisi = Array.from(document.querySelectorAll('input[name="teknisi"]:checked')).map(cb => cb.value);
   if (selectedTeknisi.length === 0) {
     showToast('Pilih minimal satu teknisi!', '#ef4444');
@@ -373,6 +373,7 @@ document.getElementById('penilaianForm').addEventListener('submit', async functi
     });
   }
 
+  // Reset form & UI setelah loop selesai
   document.getElementById('penilaianForm').reset();
   document.querySelectorAll('input[name="teknisi"]').forEach(cb => cb.checked = false);
 
@@ -380,28 +381,7 @@ document.getElementById('penilaianForm').addEventListener('submit', async functi
   submitBtn.disabled = false;
 
   showToast("Penilaian berhasil disimpan!", "#10b981");
-});     
-
-  // Kirim ke Google Spreadsheet
-  await fetch("https://script.google.com/macros/s/AKfycbzjjKvDdekJNwL9cfApUQVUfqZFVwPRZNOwKs_7wJrOp2SGl63CKZ9mwefdY3Z2jwRu7w/exec", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(record)
-  });
-      
-      // Reset form and show success
-      document.getElementById('penilaianForm').reset();
-      document.querySelectorAll('input[name="teknisi"]').forEach(cb => cb.checked = false);
-      
-      submitBtn.classList.remove('loading');
-      submitBtn.disabled = false;
-      
-      const successMsg = window.elementSdk?.config?.success_message || defaultConfig.success_message;
-      showToast(successMsg, defaultConfig.accent_color);
-    });
-    
+});    
     // Toast Notification
     function showToast(message, color) {
       const toast = document.createElement('div');
