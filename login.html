@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="id">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistem Penilaian Teknisi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    
+    html {
+      height: 100%;
+    }
+    
+    .gradient-bg {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      min-height: 100%;
+    }
+    
+    .card {
+      background: rgba(30, 30, 50, 0.8);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(100, 100, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+    
+    .input-field {
+      background: rgba(20, 20, 40, 0.6);
+      border: 1px solid rgba(100, 100, 255, 0.3);
+      color: #e0e0ff;
+      transition: all 0.3s ease;
+    }
+    
+    .input-field:focus {
+      outline: none;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+      background: rgba(30, 30, 50, 0.8);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+    }
+    
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+    
+    .checkbox-custom {
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(100, 100, 255, 0.4);
+      border-radius: 4px;
+      background: rgba(20, 20, 40, 0.6);
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    
+    .checkbox-custom:checked {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      border-color: #6366f1;
+    }
+  
+     .checkbox-custom:checked::after {
+      content: '✓';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #ffffff;
+      padding: 16px 24px;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(16, 185, 129, 0.4);
+      animation: slideIn 0.3s ease;
+      z-index: 1000;
+    }
+    
+    @keyframes slideIn {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    
+    .icon {
+      display: inline-block;
+      margin-right: 8px;
+    }
+    
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <body>
+  <div class="gradient-bg"><!-- Login Screen -->
+   <div id="loginScreen" class="min-h-full flex items-center justify-center p-6">
+    <div class="card rounded-2xl p-8 w-full max-w-md">
+     <div class="text-center mb-8">
+      <div class="text-5xl mb-4">
+       🔐
+      </div>
+      <h1 id="loginTitle" class="text-3xl font-bold mb-2" style="color: #e0e0ff;">Login Sistem</h1>
+      <p class="text-sm" style="color: #a0a0c0;">Masukkan username dan password Anda</p>
+     </div>
+     <form id="loginForm" class="space-y-6">
+      <div><label class="block text-sm font-medium mb-2" style="color: #c0c0e0;"> <span class="icon">👤</span>Username </label> <input type="text" id="username" class="input-field w-full px-4 py-3 rounded-lg" placeholder="Masukkan username" required>
+      </div>
+      <div><label class="block text-sm font-medium mb-2" style="color: #c0c0e0;"> <span class="icon">🔑</span>Password </label> <input type="password" id="password" class="input-field w-full px-4 py-3 rounded-lg" placeholder="Masukkan password" required>
+      </div><button type="submit" class="btn-primary w-full py-3 rounded-lg font-semibold text-lg" style="color: #ffffff;"> Masuk </button>
+     </form>
+     <div class="mt-8 text-center text-xs" style="color: #808090;" id="copyrightLogin">
+      © 2025 PT. Jaya Kencana
+     </div>
+    </div>
+   </div><!-- Form Screen -->
+   <div id="formScreen" class="min-h-full p-6" style="display: none;">
+    <div class="max-w-3xl mx-auto">
+     <div class="card rounded-2xl p-8 mb-6">
+      <div class="flex justify-between items-center mb-8">
+       <div>
+        <h1 id="formTitle" class="text-3xl font-bold mb-2" style="color: #e0e0ff;">Formulir Penilaian Teknisi</h1>
+        <p class="text-sm" style="color: #a0a0c0;">Silakan isi formulir penilaian di bawah ini</p>
+       </div><button id="logoutBtn" class="px-4 py-2 rounded-lg text-sm font-medium" style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3);"> Keluar </button>
+      </div>
+      <form id="penilaianForm" class="space-y-6"><!-- Nama Teknisi -->
+       <div><label class="block text-sm font-medium mb-3" style="color: #c0c0e0;"> <span class="icon">👷</span>Pilih Nama Teknisi </label>
+        <div id="teknisiList" class="space-y-3"><!-- Teknisi checkboxes will be inserted here -->
+        </div>
+       </div><!-- Poin Penilaian -->
+       <div class="relative"><label class="block text-sm font-medium mb-2" style="color: #c0c0e0;"> <span class="icon">📋</span>Poin Penilaian </label> <input type="text" id="poinPenilaian" class="input-field w-full px-4 py-3 rounded-lg" placeholder="Ketik untuk mencari poin penilaian..." autocomplete="off" required>
+        <div id="dropdownList" class="absolute top-full left-0 right-0 mt-1 rounded-lg overflow-hidden z-10" style="background: rgba(20, 20, 40, 0.95); border: 1px solid rgba(100, 100, 255, 0.3); display: none;">
+         <div class="dropdown-item px-4 py-3 cursor-pointer hover:bg-opacity-80" style="color: #e0e0ff; background: rgba(30, 30, 50, 0.6);" data-value="Kualitas Pekerjaan">
+          Kualitas Pekerjaan
+         </div>
+         <div class="dropdown-item px-4 py-3 cursor-pointer hover:bg-opacity-80" style="color: #e0e0ff; background: rgba(30, 30, 50, 0.6);" data-value="Ketepatan Waktu">
+          Ketepatan Waktu
+         </div>
+         <div class="dropdown-item px-4 py-3 cursor-pointer hover:bg-opacity-80" style="color: #e0e0ff; background: rgba(30, 30, 50, 0.6);" data-value="Komunikasi">
+          Komunikasi
+         </div>
+         <div class="dropdown-item px-4 py-3 cursor-pointer hover:bg-opacity-80" style="color: #e0e0ff; background: rgba(30, 30, 50, 0.6);" data-value="Profesionalisme">
+          Profesionalisme
+         </div>
+         <div class="dropdown-item px-4 py-3 cursor-pointer hover:bg-opacity-80" style="color: #e0e0ff; background: rgba(30, 30, 50, 0.6);" data-value="Pengetahuan Teknis">
+          Pengetahuan Teknis
+         </div>
+         <div class="dropdown-item px-4 py-3 cursor-pointer hover:bg-opacity-80" style="color: #e0e0ff; background: rgba(30, 30, 50, 0.6);" data-value="Keselamatan Kerja">
+          Keselamatan Kerja
+         </div>
+         <div class="dropdown-item px-4 py-3 cursor-pointer hover:bg-opacity-80" style="color: #e0e0ff; background: rgba(30, 30, 50, 0.6);" data-value="Inisiatif">
+          Inisiatif
+         </div>
+         <div class="dropdown-item px-4 py-3 cursor-pointer hover:bg-opacity-80" style="color: #e0e0ff; background: rgba(30, 30, 50, 0.6);" data-value="Kerjasama Tim">
+          Kerjasama Tim
+         </div>
+        </div>
+       </div><!-- Nilai -->
+       <div><label class="block text-sm font-medium mb-2" style="color: #c0c0e0;"> <span class="icon">⭐</span>Masukkan Nilai (1-100) </label> <input type="number" id="nilai" class="input-field w-full px-4 py-3 rounded-lg" placeholder="Masukkan nilai" min="1" max="100" required>
+       </div><!-- Submit Button --> <button type="submit" id="submitBtn" class="btn-primary w-full py-3 rounded-lg font-semibold text-lg" style="color: #ffffff;"> <span id="submitBtnText">Submit Penilaian</span> </button>
+      </form>
+     </div>
+     <div class="text-center text-xs" style="color: #808090;" id="copyrightForm">
+      © 2025 PT. Jaya Kencana
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      app_title: "Sistem Penilaian Teknisi",
+      login_title: "Login",
+      form_title: "Formulir Penilaian Teknisi",
+      submit_button_text: "Submit",
+      success_message: "Terima kasih! Penilaian berhasil disimpan",
+      copyright_text: "© 2025 PT. Jaya Kencana",
+      primary_color: "#6366f1",
+      secondary_color: "#8b5cf6",
+      background_color: "#1a1a2e",
+      text_color: "#e0e0ff",
+      accent_color: "#10b981"
+    };
+    
+    let currentUser = null;
+ 
+    
+    // User database with different technicians per user
+    const userDatabase = {
+      'admin': {
+        password: 'admin123',
+        teknisi: ['Ahmad Rizki', 'Budi Santoso', 'Candra Wijaya', 'Dedi Kurniawan']
+      },
+      'supervisor': {
+        password: 'super456',
+        teknisi: ['Eko Prasetyo', 'Fajar Nugroho', 'Gunawan Saputra', 'Hendra Kusuma']
+      },
+      'manager': {
+        password: 'manage789',
+        teknisi: ['Irfan Hakim', 'Joko Widodo', 'Kurnia Sari', 'Lestari Putri']
+      }
+    };
+    
+    
+    // Login Form Handler
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      
+      if (userDatabase[username] && userDatabase[username].password === password) {
+        currentUser = username;
+        showFormScreen();
+      } else {
+        showToast('Username atau password salah!', '#ef4444');
+      }
+    });
+    
+    // Show Form Screen
+    function showFormScreen() {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('formScreen').style.display = 'block';
+      
+      // Populate teknisi list based on logged-in user
+      const teknisiList = document.getElementById('teknisiList');
+      teknisiList.innerHTML = '';
+      
+      const teknisiArray = userDatabase[currentUser].teknisi;
+      teknisiArray.forEach((teknisi, index) => {
+        const div = document.createElement('div');
+        div.className = 'flex items-center p-3 rounded-lg';
+        div.style.background = 'rgba(20, 20, 40, 0.4)';
+        div.innerHTML = `
+          <input 
+            type="checkbox" 
+            id="teknisi${index}" 
+            name="teknisi" 
+            value="${teknisi}"
+            class="checkbox-custom"
+          >
+          <label for="teknisi${index}" class="ml-3 cursor-pointer" style="color: #e0e0ff;">
+            ${teknisi}
+          </label>
+        `;
+        teknisiList.appendChild(div);
+      });
+    }
+    
+    // Logout Handler
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+      currentUser = null;
+      document.getElementById('loginScreen').style.display = 'flex';
+      document.getElementById('formScreen').style.display = 'none';
+      document.getElementById('loginForm').reset();
+    });
+    
+    // Search Dropdown Handler
+    const poinInput = document.getElementById('poinPenilaian');
+    const dropdownList = document.getElementById('dropdownList');
+    const dropdownItems = document.querySelectorAll('.dropdown-item');
+    
+    poinInput.addEventListener('input', function() {
+      const searchTerm = this.value.toLowerCase();
+      let hasVisibleItems = false;
+      
+      dropdownItems.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        if (text.includes(searchTerm)) {
+          item.style.display = 'block';
+          hasVisibleItems = true;
+        } else {
+          item.style.display = 'none';
+        }
+      });
+      
+      dropdownList.style.display = hasVisibleItems && searchTerm ? 'block' : 'none';
+    });
+    
+    poinInput.addEventListener('focus', function() {
+      if (this.value) {
+        const searchTerm = this.value.toLowerCase();
+        let hasVisibleItems = false;
+        
+        dropdownItems.forEach(item => {
+          const text = item.textContent.toLowerCase();
+          if (text.includes(searchTerm)) {
+            item.style.display = 'block';
+            hasVisibleItems = true;
+          } else {
+            item.style.display = 'none';
+          }
+        });
+        
+        dropdownList.style.display = hasVisibleItems ? 'block' : 'none';
+      }
+    });
+    
+    dropdownItems.forEach(item => {
+      item.addEventListener('click', function() {
+        poinInput.value = this.dataset.value;
+        dropdownList.style.display = 'none';
+      });
+    });
+    
+    // Hide dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.relative')) {
+        dropdownList.style.display = 'none';
+      }
+    });
+    
+// Penilaian Form Handler
+document.getElementById('penilaianForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  const selectedTeknisi = Array.from(document.querySelectorAll('input[name="teknisi"]:checked')).map(cb => cb.value);
+  if (selectedTeknisi.length === 0) {
+    showToast('Pilih minimal satu teknisi!', '#ef4444');
+    return;
+  }
+
+  const poinPenilaian = document.getElementById('poinPenilaian').value;
+  const nilai = parseInt(document.getElementById('nilai').value);
+
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.classList.add('loading');
+  submitBtn.disabled = true;
+
+  for (const teknisi of selectedTeknisi) {
+    const record = {
+      id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+      username: currentUser,
+      teknisi: teknisi,
+      poin_penilaian: poinPenilaian,
+      nilai: nilai,
+      timestamp: new Date().toISOString()
+    };
+
+    await fetch("https://script.google.com/macros/s/AKfycbzjjKvDdekJNwL9cfApUQVUfqZFVwPRZNOwKs_7wJrOp2SGl63CKZ9mwefdY3Z2jwRu7w/exec", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(record)
+    });
+  }
+
+  document.getElementById('penilaianForm').reset();
+  document.querySelectorAll('input[name="teknisi"]').forEach(cb => cb.checked = false);
+
+  submitBtn.classList.remove('loading');
+  submitBtn.disabled = false;
+
+  showToast("Penilaian berhasil disimpan!", "#10b981");
+});      // Show loading state
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.classList.add('loading');
+      submitBtn.disabled = true;
+      
+      // Save each selected teknisi
+      for (const teknisi of selectedTeknisi) {
+        const record = {
+          id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+          username: currentUser,
+          teknisi: teknisi,
+          poin_penilaian: poinPenilaian,
+          nilai: nilai,
+          timestamp: new Date().toISOString()
+        };
+        
+
+  // Kirim ke Google Spreadsheet
+  await fetch("https://script.google.com/macros/s/AKfycbzjjKvDdekJNwL9cfApUQVUfqZFVwPRZNOwKs_7wJrOp2SGl63CKZ9mwefdY3Z2jwRu7w/exec", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(record)
+  });
+      
+      // Reset form and show success
+      document.getElementById('penilaianForm').reset();
+      document.querySelectorAll('input[name="teknisi"]').forEach(cb => cb.checked = false);
+      
+      submitBtn.classList.remove('loading');
+      submitBtn.disabled = false;
+      
+      const successMsg = window.elementSdk?.config?.success_message || defaultConfig.success_message;
+      showToast(successMsg, defaultConfig.accent_color);
+    });
+    
+    // Toast Notification
+    function showToast(message, color) {
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.style.background = `linear-gradient(135deg, ${color} 0%, ${color}dd 100%)`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.remove();
+      }, 3000);
+    }
+    
+    // Initialize on page load
+  </script>
+</body>
+</html>
