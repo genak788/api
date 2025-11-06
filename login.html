@@ -380,22 +380,7 @@ document.getElementById('penilaianForm').addEventListener('submit', async functi
   submitBtn.disabled = false;
 
   showToast("Penilaian berhasil disimpan!", "#10b981");
-});      // Show loading state
-      const submitBtn = document.getElementById('submitBtn');
-      submitBtn.classList.add('loading');
-      submitBtn.disabled = true;
-      
-      // Save each selected teknisi
-      for (const teknisi of selectedTeknisi) {
-        const record = {
-          id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
-          username: currentUser,
-          teknisi: teknisi,
-          poin_penilaian: poinPenilaian,
-          nilai: nilai,
-          timestamp: new Date().toISOString()
-        };
-        
+});     
 
   // Kirim ke Google Spreadsheet
   await fetch("https://script.google.com/macros/s/AKfycbzjjKvDdekJNwL9cfApUQVUfqZFVwPRZNOwKs_7wJrOp2SGl63CKZ9mwefdY3Z2jwRu7w/exec", {
