@@ -342,7 +342,7 @@
 // Penilaian Form Handler
 document.getElementById('penilaianForm').addEventListener('submit', async function(e) {
   e.preventDefault();
-
+  
   const selectedTeknisi = Array.from(document.querySelectorAll('input[name="teknisi"]:checked')).map(cb => cb.value);
   if (selectedTeknisi.length === 0) {
     showToast('Pilih minimal satu teknisi!', '#ef4444');
@@ -373,16 +373,16 @@ document.getElementById('penilaianForm').addEventListener('submit', async functi
     });
   }
 
-  // Reset form & UI setelah loop selesai
+  // ✅ Reset form setelah semua data terkirim
   document.getElementById('penilaianForm').reset();
   document.querySelectorAll('input[name="teknisi"]').forEach(cb => cb.checked = false);
 
+  // ✅ Kembalikan tombol ke kondisi normal
   submitBtn.classList.remove('loading');
   submitBtn.disabled = false;
 
   showToast("Penilaian berhasil disimpan!", "#10b981");
-});    
-    // Toast Notification
+});    // Toast Notification
     function showToast(message, color) {
       const toast = document.createElement('div');
       toast.className = 'toast';
