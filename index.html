@@ -358,7 +358,7 @@ document.getElementById('penilaianForm').addEventListener('submit', async functi
 
   for (const teknisi of selectedTeknisi) {
     const record = {
-      id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+      id: Date.now().toString() + Math.random().toString(36).substring(2, 9),
       username: currentUser,
       teknisi: teknisi,
       poin_penilaian: poinPenilaian,
@@ -366,26 +366,26 @@ document.getElementById('penilaianForm').addEventListener('submit', async functi
       timestamp: new Date().toISOString()
     };
 
-   await fetch("https://script.google.com/macros/s/AKfycbwFv3rRsdlI-hIbpZuqJmVAQW7uDwPWj__zgB9tlBrnx_seHIVA08dC-elQFF0ak6b42w/exec", {
-  method: "POST",
-  mode: "no-cors", // ✅ ini kunci anti CORS
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify(record)
-});
+    await fetch("https://script.google.com/macros/s/AKfycbwFv3rRsdlI-hIbpZuqJmVAQW7uDwPWj__zgB9tlBrnx_seHIVA08dC-elQFF0ak6b42w/exec", {
+      method: "POST",
+      mode: "no-cors", // ✅ Ini fix anti CORS
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(record)
+    });
+  }
 
-
-  // ✅ Reset form setelah semua data terkirim
   document.getElementById('penilaianForm').reset();
   document.querySelectorAll('input[name="teknisi"]').forEach(cb => cb.checked = false);
 
-  // ✅ Kembalikan tombol ke kondisi normal
   submitBtn.classList.remove('loading');
   submitBtn.disabled = false;
 
   showToast("Penilaian berhasil disimpan!", "#10b981");
-});    // Toast Notification
+});
+   
+   // Toast Notification
     function showToast(message, color) {
       const toast = document.createElement('div');
       toast.className = 'toast';
