@@ -1673,38 +1673,34 @@ selectedRecord = records.find(r => r.id === recordId);
             modal.style.display = 'flex';
         }
 
-        async function updateRecord(recordId) {
-            try {
-                showLoading('Updating record...');
-                
-                const record = currentRecords.find(r => r.__backendId === recordId);
-                if (!record) {
-                    throw new Error('Record not found');
-                }
-                
-                const updatedRecord = {
-                    ...record,
-                    building_name: document.getElementById('edit-building').value,
-                    technician_names: document.getElementById('edit-technicians').value,
-                    date: document.getElementById('edit-date').value
-                };
-                
-                const updateResult = await window.dataSdk.update(updatedRecord);
-                
-                if (!updateResult.isOk) {
-                    throw new Error('Failed to update record: ' + updateResult.error);
-                }
-                
-                showMessage('Record updated successfully!', 'success');
-                closeEditModal();
-                
-            } catch (error) {
-                console.error('Error updating record:', error);
-                showMessage('Error updating record: ' + error.message, 'error');
-            } finally {
-                hideLoading();
-            }
-        }
+       function updateRecord(recordId) {
+    showLoading('Updating record...');
+
+    // Ambil data dari localStorage
+    let records = JSON.parse(localStorage.getItem('records') || '[]');
+
+    // Cari record
+    const index = records.findIndex(r => r.id === recordId);
+    if (index === -1) {
+        showMessage("Record tidak ditemukan!", "error");
+        hideLoading();
+        return;
+    }
+
+    // Update field yang di-edit
+    records[index].building_name = document.getElementById('edit-building').value;
+    records[index].technician_names = document.getElementById('edit-technicians').value;
+    records[index].date = document.getElementById('edit-date').value;
+
+    // Simpan kembali ke localStorage
+    localStorage.setItem('records', JSON.stringify(records));
+
+    showMessage("Record berhasil diperbarui!", "success");
+    closeEditModal();
+    renderHistory();
+
+    hideLoading();
+}
 
         function closeEditModal() {
             document.getElementById('edit-modal').style.display = 'none';
