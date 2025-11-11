@@ -937,7 +937,7 @@
   <script>
         // Global variables
         let currentUser = null;
-        let currentRecords = [];
+       let currentRecords = JSON.parse(localStorage.getItem("records") || "[]");
         let unitCounters = { escalator: 0, elevator: 0 };
         let itemCounters = { escalator: {}, elevator: {} };
 
@@ -1368,38 +1368,26 @@
             itemCounters[type] = {};
         }
 
-        async function submitForm(type, formData) {
-            try {
-                showLoading('Submitting form...');
-                
-                if (currentRecords.length >= 999) {
-                    showMessage('Maximum limit of 999 records reached. Please delete some records first.', 'error');
-                    return;
-                }
-                // Ambil data lama
-let savedData = JSON.parse(localStorage.getItem('records') || '[]');
+     function submitForm(type, formData) {
+    showLoading('Saving...');
 
-// Tambah record baru
-savedData.push(formData);
+    // Ambil data lama dari localStorage
+    let stored = JSON.parse(localStorage.getItem("records") || "[]");
 
-// Simpan lagi
-localStorage.setItem('records', JSON.stringify(savedData));                
-                if (!createResult.isOk) {
-                    throw new Error('Failed to save data: ' + createResult.error);
-                }
-                
-                showMessage('Form submitted successfully!', 'success');
-                resetForm(type);
-                
-            } catch (error) {
-                console.error('Error submitting form:', error);
-                showMessage('Error submitting form: ' + error.message, 'error');
-            } finally {
-                hideLoading();
-            }
-        }
+    // Tambah data baru
+    stored.push(formData);
+
+    // Simpan kembali
+    localStorage.setItem("records", JSON.stringify(stored));
+
+    showMessage("Form submitted successfully!", "success");
+    resetForm(type);
+    hideLoading();
+}
+
 
         function renderHistory(searchTerm = '') {
+         currentRecords = JSON.parse(localStorage.getItem("records") || "[]");
             const historyList = document.getElementById('history-list');
             
             if (currentRecords.length === 0) {
@@ -1463,14 +1451,19 @@ let filteredRecords = JSON.parse(localStorage.getItem('records') || '[]');      
             renderHistory(searchTerm);
         }
 
-        async function deleteRecord(recordId) {
-            try {
-                showLoading('Deleting record...');
-                
-                const recordToDelete = currentRecords.find(r => r.__backendId === recordId);
-                if (!recordToDelete) {
-                    throw new Error('Record not found');
-                }
+       function deleteRecord(recordId) {
+    showLoading("Deleting...");
+
+    let stored = JSON.parse(localStorage.getItem("records") || "[]");
+
+    stored = stored.filter(r => r.id !== recordId);
+
+    localStorage.setItem("records", JSON.stringify(stored));
+
+    showMessage("Record deleted!", "success");
+    hideLoading();
+    renderHistory();
+}
                 
                 let savedData = JSON.parse(localStorage.getItem('records') || '[]');
 savedData = savedData.filter(r => r.id !== recordId);
