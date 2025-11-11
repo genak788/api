@@ -1368,136 +1368,109 @@
             itemCounters[type] = {};
         }
 
-       async function submitForm(type, formData) {
-    try {
-        showLoading('Submitting form...');
+        async function submitForm(type, formData) {
+            try {
+                showLoading('Submitting form...');
+                
+                if (currentRecords.length >= 999) {
+                    showMessage('Maximum limit of 999 records reached. Please delete some records first.', 'error');
+                    return;
+                }
+                // Ambil data lama
+let savedData = JSON.parse(localStorage.getItem('records') || '[]');
 
-        // Ambil data lama dari localStorage
-        let savedData = JSON.parse(localStorage.getItem('records') || '[]');
+// Tambah record baru
+savedData.push(formData);
 
-        // Tambah record baru
-        savedData.push(formData);
+// Simpan lagi
+localStorage.setItem('records', JSON.stringify(savedData));                
+                if (!createResult.isOk) {
+                    throw new Error('Failed to save data: ' + createResult.error);
+                }
+                
+                showMessage('Form submitted successfully!', 'success');
+                resetForm(type);
+                
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                showMessage('Error submitting form: ' + error.message, 'error');
+            } finally {
+                hideLoading();
+            }
+        }
 
-        // Simpan kembali ke localStorage
-        localStorage.setItem('records', JSON.stringify(savedData));
-
-        showMessage('Form submitted successfully!', 'success');
-        resetForm(type);
-
-    } catch (error) {
-        console.error('Error submitting form:', error);
-        showMessage('Error submitting form: ' + error.message, 'error');
-
-    } finally {
-        hideLoading();
-    }
-}
-
-
-     async function renderHistory(searchTerm = '') {
-    const historyList = document.getElementById('history-list');
-
-    // Ambil data dari localStorage
-    let records = JSON.parse(localStorage.getItem('records') || '[]');
-
-    // Filter user biasa (tidak admin)
-    if (currentUser.role !== 'admin') {
-        records = records.filter(record => record.username === currentUser.username);
-    }
-
-    // Filter pencarian
-    if (searchTerm) {
-        const lower = searchTerm.toLowerCase();
-        records = records.filter(record =>
-            (record.building_name || '').toLowerCase().includes(lower) ||
-            (record.technician_names || '').toLowerCase().includes(lower) ||
-            (record.date || '').includes(lower) ||
-            (record.type || '').toLowerCase().includes(lower)
-        );
-    }
-
-    // Jika kosong → tampilkan pesan
-    if (records.length === 0) {
-        historyList.innerHTML = '<p style="text-align: center; color: rgba(255, 255, 255, 0.7);">No data found.</p>';
-        return;
-    }
-
-    // Tampilkan daftar history
-    historyList.innerHTML = records.map(record => `
-        <div class="history-item">
-            <div class="history-header">
-                <div class="history-title">${record.type.toUpperCase()} - ${record.building_name}</div>
-                <div class="history-date">${record.date}</div>
-            </div>
-
-            <p><strong>Technicians:</strong> ${record.technician_names}</p>
-            <p><strong>Submitted By:</strong> ${record.username} (${record.user_type})</p>
-
-            <div class="history-actions">
-                <button class="btn btn-secondary" onclick="downloadPDF('${record.id}')">Download</button>
-                <button class="btn btn-secondary" onclick="editRecord('${record.id}')">Edit</button>
-                <button class="btn btn-danger" onclick="deleteRecord('${record.id}')">Delete</button>
-            </div>
-        </div>
-    `).join('');
-}
-
-    // Filter untuk user biasa (bukan admin)
-    if (currentUser.role !== 'admin') {
-        records = records.filter(record => record.username === currentUser.username);
-    }
-
-    // Search
-    if (searchTerm) {
-        const lower = searchTerm.toLowerCase();
-        records = records.filter(record =>
-            record.building_name.toLowerCase().includes(lower) ||
-            record.technician_names.toLowerCase().includes(lower) ||
-            record.date.includes(searchTerm) ||
-            record.type.toLowerCase().includes(lower)
-        );
-    }
-
-    if (records.length === 0) {
-        historyList.innerHTML = '<p style="text-align: center; color: rgba(255, 255, 255, 0.7);">No matching records found.</p>';
-        return;
-    }
-
-    // Render
-    historyList.innerHTML = records.map(record => `
-        <div class="history-item">
-            <div class="history-header">
-                <div class="history-title">${record.type.toUpperCase()} - ${record.building_name}</div>
-                <div class="history-date">${record.date}</div>
-            </div>
-
-            <p><strong>Teknisi:</strong> ${record.technician_names}</p>
-            <p><strong>Tanggal:</strong> ${record.date}</p>
-            <p><strong>Submitted by:</strong> ${record.username} (${record.user_type})</p>
-
-            <div class="history-actions">
-                <button class="btn btn-secondary" onclick="downloadPDF('${record.id}')">Download</button>
-                <button class="btn btn-danger" onclick="deleteRecord('${record.id}')">Delete</button>
-            </div>
-        </div>
-    `).join('');
-}
-
+        function renderHistory(searchTerm = '') {
+            const historyList = document.getElementById('history-list');
+            
+            if (currentRecords.length === 0) {
+                historyList.innerHTML = '<p style="text-align: center; color: rgba(255, 255, 255, 0.7);">No data found.</p>';
+                return;
+            }
+            
+            // Filter records by current user if not admin
+let filteredRecords = JSON.parse(localStorage.getItem('records') || '[]');            if (currentUser.role !== 'admin') {
+                filteredRecords = currentRecords.filter(record => record.username === currentUser.username);
+            }
+            
+            // Apply search filter
+            if (searchTerm) {
+                filteredRecords = filteredRecords.filter(record => {
+                    const searchLower = searchTerm.toLowerCase();
+                    return record.building_name.toLowerCase().includes(searchLower) ||
+                           record.technician_names.toLowerCase().includes(searchLower) ||
+                           record.date.includes(searchTerm) ||
+                           record.type.toLowerCase().includes(searchLower);
+                });
+            }
+            
+            if (filteredRecords.length === 0) {
+                historyList.innerHTML = '<p style="text-align: center; color: rgba(255, 255, 255, 0.7);">No matching records found.</p>';
+                return;
+            }
+            
+            historyList.innerHTML = filteredRecords.map(record => {
+                const date = new Date(record.created_at).toLocaleDateString('id-ID');
+                const units = JSON.parse(record.units || '[]');
+                
+                return `
+                    <div class="history-item">
+                        <div class="history-header">
+                            <div class="history-title">${record.type.toUpperCase()} - ${record.building_name}</div>
+                            <div class="history-date">${date}</div>
+                        </div>
+                        <p><strong>Teknisi:</strong> ${record.technician_names}</p>
+                        <p><strong>Tanggal:</strong> ${record.date}</p>
+                        <p><strong>Units:</strong> ${units.length} unit(s)</p>
+                        <p><strong>Submitted by:</strong> ${record.username} (${record.user_type})</p>
+                        
+                        <div class="history-actions">
+                            ${currentUser.role === 'admin' ? `
+                                <button class="btn btn-secondary" onclick="editRecord('${record.__backendId}')">Edit</button>
+                                <button class="btn btn-secondary" onclick="reviewRecord('${record.__backendId}')">Review</button>
+                                <button class="btn btn-secondary" onclick="downloadPDF('${record.__backendId}')">Download PDF</button>
+                                <button class="btn btn-danger" onclick="deleteRecord('${record.__backendId}')">Delete</button>
+                            ` : `
+                                <button class="btn btn-secondary" onclick="downloadPDF('${record.__backendId}')">Download PDF</button>
+                            `}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
 
         function filterHistory() {
-    const searchTerm = document.getElementById('history-search').value;
-    renderHistory(searchTerm);
-}
+            const searchTerm = document.getElementById('history-search').value;
+            renderHistory(searchTerm);
+        }
 
-
-      function deleteRecord(id) {
-    let records = JSON.parse(localStorage.getItem('records') || '[]');
-    records = records.filter(r => r.id !== id);
-    localStorage.setItem('records', JSON.stringify(records));
-    renderHistory();
-    showMessage('Record deleted', 'success');
-}
-
+        async function deleteRecord(recordId) {
+            try {
+                showLoading('Deleting record...');
+                
+                const recordToDelete = currentRecords.find(r => r.__backendId === recordId);
+                if (!recordToDelete) {
+                    throw new Error('Record not found');
+                }
                 
                 let savedData = JSON.parse(localStorage.getItem('records') || '[]');
 savedData = savedData.filter(r => r.id !== recordId);
@@ -1517,9 +1490,9 @@ renderHistory();
             }
         }
 
-      const records = JSON.parse(localStorage.getItem('records') || '[]');
-selectedRecord = records.find(r => r.id === recordId);
-
+        function editRecord(recordId) {
+            const record = currentRecords.find(r => r.__backendId === recordId);
+            if (!record) return;
             
             const modal = document.getElementById('edit-modal');
             const container = document.getElementById('edit-form-container');
@@ -1673,34 +1646,38 @@ selectedRecord = records.find(r => r.id === recordId);
             modal.style.display = 'flex';
         }
 
-       function updateRecord(recordId) {
-    showLoading('Updating record...');
-
-    // Ambil data dari localStorage
-    let records = JSON.parse(localStorage.getItem('records') || '[]');
-
-    // Cari record
-    const index = records.findIndex(r => r.id === recordId);
-    if (index === -1) {
-        showMessage("Record tidak ditemukan!", "error");
-        hideLoading();
-        return;
-    }
-
-    // Update field yang di-edit
-    records[index].building_name = document.getElementById('edit-building').value;
-    records[index].technician_names = document.getElementById('edit-technicians').value;
-    records[index].date = document.getElementById('edit-date').value;
-
-    // Simpan kembali ke localStorage
-    localStorage.setItem('records', JSON.stringify(records));
-
-    showMessage("Record berhasil diperbarui!", "success");
-    closeEditModal();
-    renderHistory();
-
-    hideLoading();
-}
+        async function updateRecord(recordId) {
+            try {
+                showLoading('Updating record...');
+                
+                const record = currentRecords.find(r => r.__backendId === recordId);
+                if (!record) {
+                    throw new Error('Record not found');
+                }
+                
+                const updatedRecord = {
+                    ...record,
+                    building_name: document.getElementById('edit-building').value,
+                    technician_names: document.getElementById('edit-technicians').value,
+                    date: document.getElementById('edit-date').value
+                };
+                
+                const updateResult = await window.dataSdk.update(updatedRecord);
+                
+                if (!updateResult.isOk) {
+                    throw new Error('Failed to update record: ' + updateResult.error);
+                }
+                
+                showMessage('Record updated successfully!', 'success');
+                closeEditModal();
+                
+            } catch (error) {
+                console.error('Error updating record:', error);
+                showMessage('Error updating record: ' + error.message, 'error');
+            } finally {
+                hideLoading();
+            }
+        }
 
         function closeEditModal() {
             document.getElementById('edit-modal').style.display = 'none';
@@ -1725,12 +1702,8 @@ selectedRecord = records.find(r => r.id === recordId);
         }
 
         function downloadPDF(recordId) {
-    const records = JSON.parse(localStorage.getItem('records') || '[]');
-    const record = records.find(r => r.id === recordId);
-    if (!record) return alert("Data tidak ditemukan!");
-
-    // lanjut ke kode PDF kamu (yang sudah ada)
-}
+            const record = currentRecords.find(r => r.__backendId === recordId);
+            if (!record) return;
             
             const units = JSON.parse(record.units || '[]');
             
@@ -2005,59 +1978,5 @@ selectedRecord = records.find(r => r.id === recordId);
             window.elementSdk.init(element);
         }
     </script>
-<script>
-(function(){
-    function c(){
-        var b=a.contentDocument||a.contentWindow.document;
-        if(b){
-            var d=b.createElement('script');
-            d.innerHTML="window.__CF$cv$params={r:'9962893bc61db58d',t:'MTc2MTczOTQ3My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
-            b.getElementsByTagName('head')[0].appendChild(d)
-        }
-    }
-    if(document.body){
-        var a=document.createElement('iframe');
-        a.height=1;
-        a.width=1;
-        a.style.position='absolute';
-        a.style.top=0;
-        a.style.left=0;
-        a.style.border='none';
-        a.style.visibility='hidden';
-        document.body.appendChild(a);
-        if('loading'!==document.readyState)c();
-        else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);
-        else{
-            var e=document.onreadystatechange||function(){};
-            document.onreadystatechange=function(b){
-                e(b);
-                'loading'!==document.readyState&&(document.onreadystatechange=e,c())
-            }
-        }
-    }
-})();
-</script>
-
-<!-- ✅ SCRIPT LOGIN HARUS DIPISAH -->
-<script>
-document.getElementById('login-form').addEventListener('submit', function (e) {
-    e.preventDefault();
-
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value.trim();
-
-    if (login(username, password)) {
-        document.getElementById('login-page').style.display = 'none';
-        document.getElementById('main-app').style.display = 'block';
-        showDashboard(); // ✅ ini yang benar untuk project kamu
-    } else {
-        const msg = document.getElementById('login-error');
-        msg.style.display = 'block';
-        msg.innerText = "Username atau password salah";
-    }
-});
-</script>
-
-</body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9962893bc61db58d',t:'MTc2MTczOTQ3My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
-
