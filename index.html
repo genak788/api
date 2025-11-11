@@ -1368,10 +1368,10 @@
             itemCounters[type] = {};
         }
 
-     function submitForm(type, formData) {
+   function submitForm(type, formData) {
     showLoading('Saving...');
 
-    // Ambil data lama dari localStorage
+    // Ambil data lama
     let stored = JSON.parse(localStorage.getItem("records") || "[]");
 
     // Tambah data baru
@@ -1379,6 +1379,9 @@
 
     // Simpan kembali
     localStorage.setItem("records", JSON.stringify(stored));
+
+    // Refresh history data in memory
+    currentRecords = stored;
 
     showMessage("Form submitted successfully!", "success");
     resetForm(type);
