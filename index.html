@@ -1368,14 +1368,31 @@
             itemCounters[type] = {};
         }
 
-        async function submitForm(type, formData) {
-            try {
-                showLoading('Submitting form...');
-                
-                if (currentRecords.length >= 999) {
-                    showMessage('Maximum limit of 999 records reached. Please delete some records first.', 'error');
-                    return;
-                }
+       async function submitForm(type, formData) {
+    try {
+        showLoading('Submitting form...');
+
+        // Ambil data lama dari localStorage
+        let savedData = JSON.parse(localStorage.getItem('records') || '[]');
+
+        // Tambah record baru
+        savedData.push(formData);
+
+        // Simpan kembali ke localStorage
+        localStorage.setItem('records', JSON.stringify(savedData));
+
+        showMessage('Form submitted successfully!', 'success');
+        resetForm(type);
+
+    } catch (error) {
+        console.error('Error submitting form:', error);
+        showMessage('Error submitting form: ' + error.message, 'error');
+
+    } finally {
+        hideLoading();
+    }
+}
+
                 // Ambil data lama
 let savedData = JSON.parse(localStorage.getItem('records') || '[]');
 
