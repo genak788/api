@@ -3,402 +3,1980 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistem Penilaian Teknisi</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>PT. JAYA KENCANA - Form System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
   <style>
-    body {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    }
-    
-    html {
-      height: 100%;
-    }
-    
-    .gradient-bg {
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-      min-height: 100%;
-    }
-    
-    .card {
-      background: rgba(30, 30, 50, 0.8);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(100, 100, 255, 0.2);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    }
-    
-    .input-field {
-      background: rgba(20, 20, 40, 0.6);
-      border: 1px solid rgba(100, 100, 255, 0.3);
-      color: #e0e0ff;
-      transition: all 0.3s ease;
-    }
-    
-    .input-field:focus {
-      outline: none;
-      border-color: #6366f1;
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-      background: rgba(30, 30, 50, 0.8);
-    }
-    
-    .btn-primary {
-      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-      transition: all 0.3s ease;
-    }
-    
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
-    }
-    
-    .btn-primary:active {
-      transform: translateY(0);
-    }
-    
-    .checkbox-custom {
-      appearance: none;
-      width: 20px;
-      height: 20px;
-      border: 2px solid rgba(100, 100, 255, 0.4);
-      border-radius: 4px;
-      background: rgba(20, 20, 40, 0.6);
-      cursor: pointer;
-      position: relative;
-      transition: all 0.3s ease;
-    }
-    
-    .checkbox-custom:checked {
-      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-      border-color: #6366f1;
-    }
-  
-     .checkbox-custom:checked::after {
-      content: '✓';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: #ffffff;
-      font-size: 14px;
-      font-weight: bold;
-    }
-    
-    .toast {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-      color: #ffffff;
-      padding: 16px 24px;
-      border-radius: 12px;
-      box-shadow: 0 8px 32px rgba(16, 185, 129, 0.4);
-      animation: slideIn 0.3s ease;
-      z-index: 1000;
-    }
-    
-    @keyframes slideIn {
-      from {
-        transform: translateX(400px);
-        opacity: 0;
-      }
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
-    }
-    
-    .icon {
-      display: inline-block;
-      margin-right: 8px;
-    }
-    
-    .loading {
-      opacity: 0.6;
-      pointer-events: none;
-    }
-  </style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #667eea 100%);
+            min-height: 100%;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: 0 0 10px 0;
+            background: linear-gradient(135deg, #ffffff, #e0e7ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .login-header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.3);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(72, 187, 120, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #f56565, #e53e3e);
+            color: white;
+            box-shadow: 0 8px 25px rgba(245, 101, 101, 0.3);
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(245, 101, 101, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .main-container {
+            display: none;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin: 0 0 10px 0;
+            background: linear-gradient(135deg, #ffffff, #e0e7ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header .subtitle {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+
+        .user-info {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 25px;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 100;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .user-display {
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #f56565, #e53e3e);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(245, 101, 101, 0.3);
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(245, 101, 101, 0.4);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .menu-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .menu-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .menu-card.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .menu-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .menu-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .form-container {
+            display: none;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .form-container.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-header {
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+            color: #ffffff;
+        }
+
+        .form-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #ffffff;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .unit-container {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .unit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .unit-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .item-container {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .item-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .photo-upload-container {
+            margin-top: 20px;
+        }
+
+        .photo-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .photo-item {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-remove {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(245, 101, 101, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .dropdown-container {
+            position: relative;
+        }
+
+        .dropdown-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(30, 60, 114, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+
+        .dropdown-item {
+            padding: 12px 15px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            transition: background 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-container {
+            display: none;
+        }
+
+        .history-container.active {
+            display: block;
+        }
+
+        .history-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .history-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .history-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .history-date {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .history-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .footer p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+
+        .error-message {
+            background: linear-gradient(135deg, #f56565, #e53e3e);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loading-content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .checkbox-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+        }
+
+        .checkbox-item label {
+            color: #ffffff;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #667eea 100%);
+            border-radius: 20px;
+            padding: 0;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: #ffffff;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .review-section {
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .review-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .review-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .review-item-title {
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .review-photos {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .review-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .review-photo:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .menu-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .user-info {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-bottom: 20px;
+                text-align: center;
+                justify-content: center;
+                width: fit-content;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .history-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .history-actions {
+                flex-wrap: wrap;
+            }
+
+            .modal-content {
+                max-width: 95%;
+                max-height: 95%;
+            }
+
+            .modal-header {
+                padding: 15px 20px;
+            }
+
+            .modal-body {
+                padding: 20px;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .user-info {
+                display: flex !important;
+            }
+        }
+    </style>
   <style>@view-transition { navigation: auto; }</style>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
  </head>
- <body>
-  <div class="gradient-bg"><!-- Login Screen -->
-   <div id="loginScreen" class="min-h-full flex items-center justify-center p-6">
-    <div class="card rounded-2xl p-8 w-full max-w-md">
-     <div class="text-center mb-8">
-      <div class="text-5xl mb-4">
-       🔐
-      </div>
-      <h1 id="loginTitle" class="text-3xl font-bold mb-2" style="color: #e0e0ff;">Login Sistem</h1>
-      <p class="text-sm" style="color: #a0a0c0;">Masukkan username dan password Anda</p>
-     </div>
-     <form id="loginForm" class="space-y-6">
-      <div><label class="block text-sm font-medium mb-2" style="color: #c0c0e0;"> <span class="icon">👤</span>Username </label> <input type="text" id="username" class="input-field w-full px-4 py-3 rounded-lg" placeholder="Masukkan username" required>
-      </div>
-      <div><label class="block text-sm font-medium mb-2" style="color: #c0c0e0;"> <span class="icon">🔑</span>Password </label> <input type="password" id="password" class="input-field w-full px-4 py-3 rounded-lg" placeholder="Masukkan password" required>
-      </div><button type="submit" class="btn-primary w-full py-3 rounded-lg font-semibold text-lg" style="color: #ffffff;"> Masuk </button>
-     </form>
-     <div class="mt-8 text-center text-xs" style="color: #808090;" id="copyrightLogin">
-      © 2025 PT. Jaya Kencana
-     </div>
+ <body><!-- Loading Overlay -->
+  <div id="loading" class="loading">
+   <div class="loading-content">
+    <div class="spinner"></div>
+    <div id="loading-text">
+     Loading...
     </div>
-   </div><!-- Form Screen -->
-   <div id="formScreen" class="min-h-full p-6" style="display: none;">
-    <div class="max-w-3xl mx-auto">
-     <div class="card rounded-2xl p-8 mb-6">
-      <div class="flex justify-between items-center mb-8">
-       <div>
-        <h1 id="formTitle" class="text-3xl font-bold mb-2" style="color: #e0e0ff;">Formulir Penilaian Teknisi</h1>
-        <p class="text-sm" style="color: #a0a0c0;">Silakan isi formulir penilaian di bawah ini</p>
-       </div><button id="logoutBtn" class="px-4 py-2 rounded-lg text-sm font-medium" style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3);"> Keluar </button>
-      </div>
-      <form id="penilaianForm" class="space-y-6"><!-- Nama Teknisi -->
-       <div><label class="block text-sm font-medium mb-3" style="color: #c0c0e0;"> <span class="icon">👷</span>Pilih Nama Teknisi </label>
-        <div id="teknisiList" class="space-y-3"><!-- Teknisi checkboxes will be inserted here -->
-        </div>
-       </div><!-- Poin Penilaian -->
-       <div class="relative"><label class="block text-sm font-medium mb-2" style="color: #c0c0e0;"> <span class="icon">📋</span>Poin Penilaian </label> <input type="text" id="poinPenilaian" class="input-field w-full px-4 py-3 rounded-lg" placeholder="Ketik untuk mencari poin penilaian..." autocomplete="off" required>
-        <div id="dropdownList" class="absolute top-full left-0 right-0 mt-1 rounded-lg overflow-hidden z-10" style="background: rgba(20, 20, 40, 0.95); border: 1px solid rgba(100, 100, 255, 0.3); display: none;">
-         <div class="dropdown-item px-4 py-3 cursor-pointer hover:bg-opacity-80" style="color: #e0e0ff; background: rgba(30, 30, 50, 0.6);" data-value="Kualitas Pekerjaan">
-          Servis MMR
-         </div>
-         <div class="dropdown-item px-4 py-3 cursor-pointer hover:bg-opacity-80" style="color: #e0e0ff; background: rgba(30, 30, 50, 0.6);" data-value="Ketepatan Waktu">
-          Servis IRISNV
-         </div>
-         <div class="dropdown-item px-4 py-3 cursor-pointer hover:bg-opacity-80" style="color: #e0e0ff; background: rgba(30, 30, 50, 0.6);" data-value="Komunikasi">
-          Servis ACRA
-         </div>
-         <div class="dropdown-item px-4 py-3 cursor-pointer hover:bg-opacity-80" style="color: #e0e0ff; background: rgba(30, 30, 50, 0.6);" data-value="Profesionalisme">
-          Setting Brake
-         </div>
-         <div class="dropdown-item px-4 py-3 cursor-pointer hover:bg-opacity-80" style="color: #e0e0ff; background: rgba(30, 30, 50, 0.6);" data-value="Pengetahuan Teknis">
-          Setting Pintu
-         </div>
-         <div class="dropdown-item px-4 py-3 cursor-pointer hover:bg-opacity-80" style="color: #e0e0ff; background: rgba(30, 30, 50, 0.6);" data-value="Keselamatan Kerja">
-          Setting Rail
-         </div>
-         <div class="dropdown-item px-4 py-3 cursor-pointer hover:bg-opacity-80" style="color: #e0e0ff; background: rgba(30, 30, 50, 0.6);" data-value="Inisiatif">
-          Inisiatif
-         </div>
-         <div class="dropdown-item px-4 py-3 cursor-pointer hover:bg-opacity-80" style="color: #e0e0ff; background: rgba(30, 30, 50, 0.6);" data-value="Kerjasama Tim">
-          Kerjasama Tim
-         </div>
-        </div>
-       </div><!-- Nilai -->
-       <div><label class="block text-sm font-medium mb-2" style="color: #c0c0e0;"> <span class="icon">⭐</span>Masukkan Nilai (1-100) </label> <input type="number" id="nilai" class="input-field w-full px-4 py-3 rounded-lg" placeholder="Masukkan nilai" min="1" max="100" required>
-       </div><!-- Submit Button --> <button type="submit" id="submitBtn" class="btn-primary w-full py-3 rounded-lg font-semibold text-lg" style="color: #ffffff;"> <span id="submitBtnText">Submit Penilaian</span> </button>
-      </form>
-     </div>
-     <div class="text-center text-xs" style="color: #808090;" id="copyrightForm">
-      © 2025 PT. Jaya Kencana
-     </div>
+   </div>
+  </div><!-- Login Page -->
+  <div id="login-page" class="login-container">
+   <div class="login-card">
+    <div class="login-header">
+     <h1 id="company-name">PT. JAYA KENCANA</h1>
+     <p>Form System Login</p>
     </div>
+    <div id="login-error" class="error-message" style="display: none;"></div>
+    <form id="login-form">
+     <div class="form-group"><label for="username">Username</label> <input type="text" id="username" name="username" required placeholder="Enter your username">
+     </div>
+     <div class="form-group"><label for="password">Password</label> <input type="password" id="password" name="password" required placeholder="Enter your password">
+     </div><button type="submit" class="btn btn-primary">Login</button>
+    </form>
+   </div>
+  </div><!-- Main Application -->
+  <div id="main-app" class="main-container">
+   <div class="user-info"><span id="user-display" class="user-display"></span> <button class="logout-btn" onclick="logout()">Logout</button>
+   </div>
+   <div class="header">
+    <h1 id="company-header">PT. JAYA KENCANA</h1>
+    <div class="subtitle" id="user-subtitle">
+     Welcome
+    </div>
+   </div><!-- Menu Navigation -->
+   <div class="menu-grid">
+    <div class="menu-card" onclick="showForm('escalator')">
+     <div class="menu-icon">
+      🔧
+     </div>
+     <h3 class="menu-title">Safety Escalator</h3>
+    </div>
+    <div class="menu-card" onclick="showForm('elevator')">
+     <div class="menu-icon">
+      🏢
+     </div>
+     <h3 class="menu-title">Safety Elevator</h3>
+    </div>
+    <div class="menu-card" onclick="showRealization()">
+     <div class="menu-icon">
+      📊
+     </div>
+     <h3 class="menu-title">Realisasi</h3>
+    </div>
+    <div class="menu-card" onclick="showHistory()">
+     <div class="menu-icon">
+      📋
+     </div>
+     <h3 class="menu-title">History</h3>
+    </div>
+   </div><!-- Form Containers -->
+   <div id="escalator-form" class="form-container">
+    <div class="form-header"><button class="btn btn-secondary" onclick="goBack()" style="float: left; margin-bottom: 10px;">← Back to Dashboard</button>
+     <h2 class="form-title">Safety Escalator Form</h2>
+    </div>
+    <form id="escalator-form-element">
+     <div class="form-section">
+      <div class="form-row">
+       <div class="form-group"><label for="escalator-building">Nama Gedung/Proyek</label>
+        <div class="dropdown-container"><input type="text" id="escalator-building" name="building_name" required placeholder="Type to search building...">
+         <div id="escalator-building-dropdown" class="dropdown-list"></div>
+        </div>
+       </div>
+       <div class="form-group"><label>Nama Teknisi</label>
+        <div id="escalator-technicians" class="checkbox-group"></div>
+       </div>
+       <div class="form-group"><label for="escalator-date">Tanggal</label> <input type="date" id="escalator-date" name="date" required>
+       </div>
+      </div>
+     </div>
+     <div id="escalator-units-container">
+      <div class="section-title">
+       Units
+      </div>
+     </div>
+     <div style="margin-top: 30px; text-align: center;"><button type="button" class="btn btn-secondary" onclick="addUnit('escalator')" style="padding: 8px 16px; font-size: 14px; margin-right: 10px;">+ Tambah Unit</button> <button type="submit" class="btn btn-success">Submit</button>
+     </div>
+    </form>
+   </div>
+   <div id="elevator-form" class="form-container">
+    <div class="form-header"><button class="btn btn-secondary" onclick="goBack()" style="float: left; margin-bottom: 10px;">← Back to Dashboard</button>
+     <h2 class="form-title">Safety Elevator Form</h2>
+    </div>
+    <form id="elevator-form-element">
+     <div class="form-section">
+      <div class="form-row">
+       <div class="form-group"><label for="elevator-building">Nama Gedung/Proyek</label>
+        <div class="dropdown-container"><input type="text" id="elevator-building" name="building_name" required placeholder="Type to search building...">
+         <div id="elevator-building-dropdown" class="dropdown-list"></div>
+        </div>
+       </div>
+       <div class="form-group"><label>Nama Teknisi</label>
+        <div id="elevator-technicians" class="checkbox-group"></div>
+       </div>
+       <div class="form-group"><label for="elevator-date">Tanggal</label> <input type="date" id="elevator-date" name="date" required>
+       </div>
+      </div>
+     </div>
+     <div id="elevator-units-container">
+      <div class="section-title">
+       Units
+      </div>
+     </div>
+     <div style="margin-top: 30px; text-align: center;"><button type="button" class="btn btn-secondary" onclick="addUnit('elevator')" style="padding: 8px 16px; font-size: 14px; margin-right: 10px;">+ Tambah Unit</button> <button type="submit" class="btn btn-success">Submit</button>
+     </div>
+    </form>
+   </div><!-- Realization Container -->
+   <div id="realization-container" class="form-container">
+    <div class="form-header"><button class="btn btn-secondary" onclick="goBack()" style="float: left; margin-bottom: 10px;">← Back to Dashboard</button>
+     <h2 class="form-title">Realisasi</h2>
+    </div>
+    <div id="realization-content">
+     <p style="text-align: center; color: rgba(255, 255, 255, 0.7); font-size: 1.2rem;">Fitur realisasi akan segera tersedia</p>
+    </div>
+   </div><!-- History Container -->
+   <div id="history-container" class="history-container">
+    <div class="form-header"><button class="btn btn-secondary" onclick="goBack()" style="float: left; margin-bottom: 10px;">← Back to Dashboard</button>
+     <h2 class="form-title">History Data</h2>
+    </div>
+    <div class="form-group" style="margin-bottom: 30px;"><label for="history-search">Search History</label> <input type="text" id="history-search" placeholder="Search by building name, technician, or date..." onkeyup="filterHistory()">
+    </div>
+    <div id="history-list"></div>
+   </div><!-- Edit Record Modal -->
+   <div id="edit-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+     <div class="modal-header">
+      <h2>Edit Record</h2><button class="modal-close" onclick="closeEditModal()">×</button>
+     </div>
+     <div id="edit-form-container"></div>
+    </div>
+   </div><!-- Review Record Modal -->
+   <div id="review-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+     <div class="modal-header">
+      <h2>Review Record</h2><button class="modal-close" onclick="closeReviewModal()">×</button>
+     </div>
+     <div id="review-content"></div>
+    </div>
+   </div><!-- Footer -->
+   <div class="footer">
+    <p id="copyright-footer">Copyright 2025 PT. Jaya Kencana</p>
    </div>
   </div>
   <script>
-    const defaultConfig = {
-      app_title: "Sistem Penilaian Teknisi",
-      login_title: "Login",
-      form_title: "Formulir Penilaian Teknisi",
-      submit_button_text: "Submit",
-      success_message: "Terima kasih! Penilaian berhasil disimpan",
-      copyright_text: "© 2025 PT. Jaya Kencana",
-      primary_color: "#6366f1",
-      secondary_color: "#8b5cf6",
-      background_color: "#1a1a2e",
-      text_color: "#e0e0ff",
-      accent_color: "#10b981"
-    };
-    
-    let currentUser = null;
- 
-    
-    // User database with different technicians per user
-    const userDatabase = {
-      'admin': {
-        password: 'admin123',
-        teknisi: ['Nova', 'Zhahral', 'Nirwana', 'Asrori']
-      },
-      'supervisor': {
-        password: 'super456',
-        teknisi: ['Eko Prasetyo', 'Fajar Nugroho', 'Gunawan Saputra', 'Hendra Kusuma']
-      },
-      'manager': {
-        password: 'manage789',
-        teknisi: ['Irfan Hakim', 'Joko Widodo', 'Kurnia Sari', 'Lestari Putri']
-      }
-    };
-    
-    
-    // Login Form Handler
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const username = document.getElementById('username').value.trim();
-      const password = document.getElementById('password').value;
-      
-      if (userDatabase[username] && userDatabase[username].password === password) {
-        currentUser = username;
-        showFormScreen();
-      } else {
-        showToast('Username atau password salah!', '#ef4444');
-      }
-    });
-    
-    // Show Form Screen
-    function showFormScreen() {
-      document.getElementById('loginScreen').style.display = 'none';
-      document.getElementById('formScreen').style.display = 'block';
-      
-      // Populate teknisi list based on logged-in user
-      const teknisiList = document.getElementById('teknisiList');
-      teknisiList.innerHTML = '';
-      
-      const teknisiArray = userDatabase[currentUser].teknisi;
-      teknisiArray.forEach((teknisi, index) => {
-        const div = document.createElement('div');
-        div.className = 'flex items-center p-3 rounded-lg';
-        div.style.background = 'rgba(20, 20, 40, 0.4)';
-        div.innerHTML = `
-          <input 
-            type="checkbox" 
-            id="teknisi${index}" 
-            name="teknisi" 
-            value="${teknisi}"
-            class="checkbox-custom"
-          >
-          <label for="teknisi${index}" class="ml-3 cursor-pointer" style="color: #e0e0ff;">
-            ${teknisi}
-          </label>
-        `;
-        teknisiList.appendChild(div);
-      });
-    }
-    
-    // Logout Handler
-    document.getElementById('logoutBtn').addEventListener('click', function() {
-      currentUser = null;
-      document.getElementById('loginScreen').style.display = 'flex';
-      document.getElementById('formScreen').style.display = 'none';
-      document.getElementById('loginForm').reset();
-    });
-    
-    // Search Dropdown Handler
-    const poinInput = document.getElementById('poinPenilaian');
-    const dropdownList = document.getElementById('dropdownList');
-    const dropdownItems = document.querySelectorAll('.dropdown-item');
-    
-    poinInput.addEventListener('input', function() {
-      const searchTerm = this.value.toLowerCase();
-      let hasVisibleItems = false;
-      
-      dropdownItems.forEach(item => {
-        const text = item.textContent.toLowerCase();
-        if (text.includes(searchTerm)) {
-          item.style.display = 'block';
-          hasVisibleItems = true;
-        } else {
-          item.style.display = 'none';
+        // Global variables
+        let currentUser = null;
+        let currentRecords = [];
+        let unitCounters = { escalator: 0, elevator: 0 };
+        let itemCounters = { escalator: {}, elevator: {} };
+
+        // User data with different technicians and buildings per user
+        const userData = {
+            admin: {
+                password: 'admin123',
+                role: 'admin',
+                technicians: ['Ahmad Rizki', 'Budi Santoso', 'Candra Wijaya', 'Dedi Kurniawan', 'Eko Prasetyo'],
+                buildings: ['Gedung A', 'Gedung B', 'Mall Central', 'Office Tower']
+            },
+            user1: {
+                password: '123',
+                role: 'user',
+                technicians: ['Teknisi A', 'Teknisi B', 'Teknisi C'],
+                buildings: ['Proyek Alpha', 'Proyek Beta', 'Gedung Utama']
+            },
+            user2: {
+                password: 'user2',
+                role: 'user',
+                technicians: ['Teknisi D', 'Teknisi E'],
+                buildings: ['Plaza Indonesia', 'Grand Indonesia', 'Senayan City']
+            },
+            user3: {
+                password: '456',
+                role: 'user',
+                technicians: ['Teknisi F', 'Teknisi G', 'Teknisi H'],
+                buildings: ['Mall Taman Anggrek', 'Central Park', 'Kelapa Gading Mall']
+            }
+        };
+
+        // Dropdown data
+        const dropdownData = {
+            spareparts: ['Motor', 'Belt', 'Roller', 'Chain', 'Brake', 'Control Panel', 'Sensor', 'Cable', 'Bearing', 'Switch', 'Gear Box', 'Handrail', 'Step', 'Comb Plate'],
+            conditions: ['Baik', 'Rusak Ringan', 'Rusak Berat', 'Perlu Penggantian', 'Maintenance Rutin', 'Perlu Monitoring'],
+            quantities: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+            units: ['Pcs', 'Unit', 'Set', 'Meter', 'Kg', 'Liter', 'Roll', 'Pack', 'Buah'],
+            remarks: ['Normal Operation', 'Perlu Perhatian', 'Segera Diperbaiki', 'Dalam Perbaikan', 'Menunggu Sparepart', 'Selesai Diperbaiki'],
+            priorities: ['High', 'Medium', 'Low', 'Critical', 'Normal']
+        };
+
+        // Data SDK handler
+        const dataHandler = {
+            onDataChanged(data) {
+                currentRecords = data;
+                if (document.getElementById('history-container').classList.contains('active')) {
+                    renderHistory();
+                }
+            }
+        };
+
+        // Authentication functions
+        function login(username, password) {
+            const user = userData[username];
+            if (user && user.password === password) {
+                currentUser = { username, ...user };
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                return true;
+            }
+            return false;
         }
-      });
-      
-      dropdownList.style.display = hasVisibleItems && searchTerm ? 'block' : 'none';
-    });
-    
-    poinInput.addEventListener('focus', function() {
-      if (this.value) {
-        const searchTerm = this.value.toLowerCase();
-        let hasVisibleItems = false;
-        
-        dropdownItems.forEach(item => {
-          const text = item.textContent.toLowerCase();
-          if (text.includes(searchTerm)) {
-            item.style.display = 'block';
-            hasVisibleItems = true;
-          } else {
-            item.style.display = 'none';
-          }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            document.getElementById('login-page').style.display = 'flex';
+            document.getElementById('main-app').style.display = 'none';
+            hideAllContainers();
+            showDashboard();
+            // Reset login form
+            document.getElementById('login-form').reset();
+            document.getElementById('login-error').style.display = 'none';
+        }
+
+        function checkAuth() {
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                return true;
+            }
+            return false;
+        }
+
+        // UI Functions
+        function hideAllContainers() {
+            document.querySelectorAll('.form-container, .history-container').forEach(container => {
+                container.classList.remove('active');
+            });
+            document.querySelectorAll('.menu-card').forEach(card => {
+                card.classList.remove('active');
+            });
+        }
+
+        function showDashboard() {
+            hideAllContainers();
+            document.querySelector('.menu-grid').style.display = 'grid';
+        }
+
+        function hideDashboard() {
+            document.querySelector('.menu-grid').style.display = 'none';
+        }
+
+        function showForm(type) {
+            hideDashboard();
+            hideAllContainers();
+            document.getElementById(`${type}-form`).classList.add('active');
+            populateFormData(type);
+        }
+
+        function showRealization() {
+            hideDashboard();
+            hideAllContainers();
+            document.getElementById('realization-container').classList.add('active');
+        }
+
+        function showHistory() {
+            hideDashboard();
+            hideAllContainers();
+            document.getElementById('history-container').classList.add('active');
+            renderHistory();
+        }
+
+        function goBack() {
+            hideAllContainers();
+            showDashboard();
+        }
+
+        function populateFormData(type) {
+            // Populate technicians checkboxes
+            const techContainer = document.getElementById(`${type}-technicians`);
+            techContainer.innerHTML = '';
+            
+            currentUser.technicians.forEach(tech => {
+                const checkboxItem = document.createElement('div');
+                checkboxItem.className = 'checkbox-item';
+                checkboxItem.innerHTML = `
+                    <input type="checkbox" id="${type}-tech-${tech}" name="technicians" value="${tech}">
+                    <label for="${type}-tech-${tech}">${tech}</label>
+                `;
+                techContainer.appendChild(checkboxItem);
+            });
+
+            // Setup building dropdown
+            setupDropdown(`${type}-building`, currentUser.buildings);
+        }
+
+        function setupDropdown(inputId, options) {
+            const input = document.getElementById(inputId);
+            const dropdown = document.getElementById(`${inputId}-dropdown`);
+            
+            input.addEventListener('input', function() {
+                const value = this.value.toLowerCase();
+                const filtered = options.filter(option => 
+                    option.toLowerCase().includes(value)
+                );
+                
+                dropdown.innerHTML = '';
+                if (filtered.length > 0 && value) {
+                    filtered.forEach(option => {
+                        const item = document.createElement('div');
+                        item.className = 'dropdown-item';
+                        item.textContent = option;
+                        item.onclick = () => {
+                            input.value = option;
+                            dropdown.style.display = 'none';
+                        };
+                        dropdown.appendChild(item);
+                    });
+                    dropdown.style.display = 'block';
+                } else {
+                    dropdown.style.display = 'none';
+                }
+            });
+
+            input.addEventListener('focus', function() {
+                if (this.value) {
+                    const event = new Event('input');
+                    this.dispatchEvent(event);
+                }
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+                    dropdown.style.display = 'none';
+                }
+            });
+        }
+
+        function setupItemDropdown(inputId, options) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+
+            const dropdownId = `${inputId}-dropdown`;
+            let dropdown = document.getElementById(dropdownId);
+            
+            if (!dropdown) {
+                dropdown = document.createElement('div');
+                dropdown.id = dropdownId;
+                dropdown.className = 'dropdown-list';
+                input.parentNode.appendChild(dropdown);
+            }
+            
+            input.addEventListener('input', function() {
+                const value = this.value.toLowerCase();
+                const filtered = options.filter(option => 
+                    option.toLowerCase().includes(value)
+                );
+                
+                dropdown.innerHTML = '';
+                if (filtered.length > 0 && value) {
+                    filtered.forEach(option => {
+                        const item = document.createElement('div');
+                        item.className = 'dropdown-item';
+                        item.textContent = option;
+                        item.onclick = () => {
+                            input.value = option;
+                            dropdown.style.display = 'none';
+                        };
+                        dropdown.appendChild(item);
+                    });
+                    dropdown.style.display = 'block';
+                } else {
+                    dropdown.style.display = 'none';
+                }
+            });
+
+            input.addEventListener('focus', function() {
+                if (this.value) {
+                    const event = new Event('input');
+                    this.dispatchEvent(event);
+                }
+            });
+        }
+
+        function addUnit(type) {
+            unitCounters[type]++;
+            const unitId = unitCounters[type];
+            itemCounters[type][unitId] = 0;
+            
+            const container = document.getElementById(`${type}-units-container`);
+            
+            const unitDiv = document.createElement('div');
+            unitDiv.className = 'unit-container';
+            unitDiv.id = `${type}-unit-${unitId}`;
+            
+            unitDiv.innerHTML = `
+                <div class="unit-header">
+                    <div class="unit-title">Unit ${unitId}</div>
+                    <button type="button" class="btn btn-danger" onclick="deleteUnit('${type}', ${unitId})" style="padding: 6px 12px; font-size: 12px;">Delete Unit</button>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Unit</label>
+                        <input type="text" name="${type}_unit_${unitId}" required placeholder="Enter unit name">
+                    </div>
+                    <div class="form-group">
+                        <label>MFG</label>
+                        <input type="text" name="${type}_mfg_${unitId}" required placeholder="Enter MFG">
+                    </div>
+                    <div class="form-group">
+                        <label>Type</label>
+                        <input type="text" name="${type}_type_${unitId}" required placeholder="Enter type">
+                    </div>
+                </div>
+                
+                <div class="section-title">
+                    ITEM
+                    <button type="button" class="btn btn-secondary" onclick="addItem('${type}', ${unitId})" style="float: right; padding: 6px 12px; font-size: 12px;">+ Tambah Item</button>
+                </div>
+                
+                <div id="${type}-items-${unitId}"></div>
+            `;
+            
+            container.appendChild(unitDiv);
+            addItem(type, unitId); // Add first item automatically
+        }
+
+        function deleteUnit(type, unitId) {
+            const unitElement = document.getElementById(`${type}-unit-${unitId}`);
+            if (unitElement) {
+                unitElement.remove();
+                delete itemCounters[type][unitId];
+            }
+        }
+
+        function addItem(type, unitId) {
+            const container = document.getElementById(`${type}-items-${unitId}`);
+            const existingItems = container.querySelectorAll('.item-container');
+            const itemId = existingItems.length + 1;
+            
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'item-container';
+            itemDiv.id = `${type}-item-${unitId}-${itemId}`;
+            
+            itemDiv.innerHTML = `
+                <div class="item-header">
+                    <div class="item-title">Item ${itemId}</div>
+                    <div>
+                        <button type="button" class="btn btn-danger" onclick="deleteItem('${type}', ${unitId}, ${itemId})" style="padding: 4px 8px; font-size: 11px;">Delete Item</button>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Item Sparepart</label>
+                        <div class="dropdown-container">
+                            <input type="text" id="${type}-sparepart-${unitId}-${itemId}" name="${type}_sparepart_${unitId}_${itemId}" required placeholder="Type to search sparepart...">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Kondisi</label>
+                        <div class="dropdown-container">
+                            <input type="text" id="${type}-condition-${unitId}-${itemId}" name="${type}_condition_${unitId}_${itemId}" required placeholder="Type to search condition...">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Jumlah</label>
+                        <div class="dropdown-container">
+                            <input type="text" id="${type}-quantity-${unitId}-${itemId}" name="${type}_quantity_${unitId}_${itemId}" required placeholder="Enter quantity...">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Satuan</label>
+                        <div class="dropdown-container">
+                            <input type="text" id="${type}-unit-${unitId}-${itemId}" name="${type}_unit_${unitId}_${itemId}" required placeholder="Type to search unit...">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Remarks</label>
+                        <div class="dropdown-container">
+                            <input type="text" id="${type}-remarks-${unitId}-${itemId}" name="${type}_remarks_${unitId}_${itemId}" placeholder="Type to search remarks...">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Prioritas</label>
+                        <div class="dropdown-container">
+                            <input type="text" id="${type}-priority-${unitId}-${itemId}" name="${type}_priority_${unitId}_${itemId}" required placeholder="Type to search priority...">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="photo-upload-container">
+                    <label>Foto Part</label>
+                    <input type="file" accept="image/*" onchange="handlePhotoUpload(event, '${type}', ${unitId}, ${itemId}, 1)">
+                    <div id="${type}-photos-${unitId}-${itemId}" class="photo-preview"></div>
+                </div>
+            `;
+            
+            container.appendChild(itemDiv);
+            
+            // Setup dropdowns for this item
+            setTimeout(() => {
+                setupItemDropdown(`${type}-sparepart-${unitId}-${itemId}`, dropdownData.spareparts);
+                setupItemDropdown(`${type}-condition-${unitId}-${itemId}`, dropdownData.conditions);
+                setupItemDropdown(`${type}-quantity-${unitId}-${itemId}`, dropdownData.quantities);
+                setupItemDropdown(`${type}-unit-${unitId}-${itemId}`, dropdownData.units);
+                setupItemDropdown(`${type}-remarks-${unitId}-${itemId}`, dropdownData.remarks);
+                setupItemDropdown(`${type}-priority-${unitId}-${itemId}`, dropdownData.priorities);
+            }, 100);
+        }
+
+        function deleteItem(type, unitId, itemId) {
+            const itemElement = document.getElementById(`${type}-item-${unitId}-${itemId}`);
+            if (itemElement) {
+                itemElement.remove();
+                renumberItems(type, unitId);
+            }
+        }
+
+        function renumberItems(type, unitId) {
+            const container = document.getElementById(`${type}-items-${unitId}`);
+            const items = container.querySelectorAll('.item-container');
+            
+            items.forEach((item, index) => {
+                const newItemNumber = index + 1;
+                const titleElement = item.querySelector('.item-title');
+                if (titleElement) {
+                    titleElement.textContent = `Item ${newItemNumber}`;
+                }
+            });
+        }
+
+        function handlePhotoUpload(event, type, unitId, itemId, photoIndex) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const photoContainer = document.getElementById(`${type}-photos-${unitId}-${itemId}`);
+                
+                const photoDiv = document.createElement('div');
+                photoDiv.className = 'photo-item';
+                photoDiv.innerHTML = `
+                    <img src="${e.target.result}" alt="Photo ${photoIndex}">
+                    <button type="button" class="photo-remove" onclick="removePhoto(this)">×</button>
+                    <input type="hidden" name="${type}_photo_${unitId}_${itemId}_${photoIndex}" value="${e.target.result}">
+                `;
+                
+                photoContainer.appendChild(photoDiv);
+                
+                // Add new photo input
+                const newPhotoIndex = photoIndex + 1;
+                const newInput = document.createElement('input');
+                newInput.type = 'file';
+                newInput.accept = 'image/*';
+                newInput.onchange = (e) => handlePhotoUpload(e, type, unitId, itemId, newPhotoIndex);
+                
+                photoContainer.parentNode.appendChild(newInput);
+            };
+            
+            reader.readAsDataURL(file);
+        }
+
+        function removePhoto(button) {
+            button.parentElement.remove();
+        }
+
+        function resetForm(type) {
+            document.getElementById(`${type}-form-element`).reset();
+            document.getElementById(`${type}-units-container`).innerHTML = `
+                <div class="section-title">Units</div>
+            `;
+            unitCounters[type] = 0;
+            itemCounters[type] = {};
+        }
+
+        async function submitForm(type, formData) {
+            try {
+                showLoading('Submitting form...');
+                
+                if (currentRecords.length >= 999) {
+                    showMessage('Maximum limit of 999 records reached. Please delete some records first.', 'error');
+                    return;
+                }
+                // Ambil data lama
+let savedData = JSON.parse(localStorage.getItem('records') || '[]');
+
+// Tambah record baru
+savedData.push(formData);
+
+// Simpan lagi
+localStorage.setItem('records', JSON.stringify(savedData));                
+                if (!createResult.isOk) {
+                    throw new Error('Failed to save data: ' + createResult.error);
+                }
+                
+                showMessage('Form submitted successfully!', 'success');
+                resetForm(type);
+                
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                showMessage('Error submitting form: ' + error.message, 'error');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        function renderHistory(searchTerm = '') {
+            const historyList = document.getElementById('history-list');
+            
+            if (currentRecords.length === 0) {
+                historyList.innerHTML = '<p style="text-align: center; color: rgba(255, 255, 255, 0.7);">No data found.</p>';
+                return;
+            }
+            
+            // Filter records by current user if not admin
+let filteredRecords = JSON.parse(localStorage.getItem('records') || '[]');            if (currentUser.role !== 'admin') {
+                filteredRecords = currentRecords.filter(record => record.username === currentUser.username);
+            }
+            
+            // Apply search filter
+            if (searchTerm) {
+                filteredRecords = filteredRecords.filter(record => {
+                    const searchLower = searchTerm.toLowerCase();
+                    return record.building_name.toLowerCase().includes(searchLower) ||
+                           record.technician_names.toLowerCase().includes(searchLower) ||
+                           record.date.includes(searchTerm) ||
+                           record.type.toLowerCase().includes(searchLower);
+                });
+            }
+            
+            if (filteredRecords.length === 0) {
+                historyList.innerHTML = '<p style="text-align: center; color: rgba(255, 255, 255, 0.7);">No matching records found.</p>';
+                return;
+            }
+            
+            historyList.innerHTML = filteredRecords.map(record => {
+                const date = new Date(record.created_at).toLocaleDateString('id-ID');
+                const units = JSON.parse(record.units || '[]');
+                
+                return `
+                    <div class="history-item">
+                        <div class="history-header">
+                            <div class="history-title">${record.type.toUpperCase()} - ${record.building_name}</div>
+                            <div class="history-date">${date}</div>
+                        </div>
+                        <p><strong>Teknisi:</strong> ${record.technician_names}</p>
+                        <p><strong>Tanggal:</strong> ${record.date}</p>
+                        <p><strong>Units:</strong> ${units.length} unit(s)</p>
+                        <p><strong>Submitted by:</strong> ${record.username} (${record.user_type})</p>
+                        
+                        <div class="history-actions">
+                            ${currentUser.role === 'admin' ? `
+                                <button class="btn btn-secondary" onclick="editRecord('${record.__backendId}')">Edit</button>
+                                <button class="btn btn-secondary" onclick="reviewRecord('${record.__backendId}')">Review</button>
+                                <button class="btn btn-secondary" onclick="downloadPDF('${record.__backendId}')">Download PDF</button>
+                                <button class="btn btn-danger" onclick="deleteRecord('${record.__backendId}')">Delete</button>
+                            ` : `
+                                <button class="btn btn-secondary" onclick="downloadPDF('${record.__backendId}')">Download PDF</button>
+                            `}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterHistory() {
+            const searchTerm = document.getElementById('history-search').value;
+            renderHistory(searchTerm);
+        }
+
+        async function deleteRecord(recordId) {
+            try {
+                showLoading('Deleting record...');
+                
+                const recordToDelete = currentRecords.find(r => r.__backendId === recordId);
+                if (!recordToDelete) {
+                    throw new Error('Record not found');
+                }
+                
+                let savedData = JSON.parse(localStorage.getItem('records') || '[]');
+savedData = savedData.filter(r => r.id !== recordId);
+localStorage.setItem('records', JSON.stringify(savedData));
+renderHistory();                
+                if (!deleteResult.isOk) {
+                    throw new Error('Failed to delete record: ' + deleteResult.error);
+                }
+                
+                showMessage('Record deleted successfully!', 'success');
+                
+            } catch (error) {
+                console.error('Error deleting record:', error);
+                showMessage('Error deleting record: ' + error.message, 'error');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        function editRecord(recordId) {
+            const record = currentRecords.find(r => r.__backendId === recordId);
+            if (!record) return;
+            
+            const modal = document.getElementById('edit-modal');
+            const container = document.getElementById('edit-form-container');
+            
+            const units = JSON.parse(record.units || '[]');
+            
+            container.innerHTML = `
+                <div class="modal-body">
+                    <form id="edit-record-form">
+                        <div class="form-section">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Nama Gedung/Proyek</label>
+                                    <input type="text" id="edit-building" value="${record.building_name}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Nama Teknisi</label>
+                                    <input type="text" id="edit-technicians" value="${record.technician_names}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Tanggal</label>
+                                    <input type="date" id="edit-date" value="${record.date}" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="section-title">Units (${units.length})</div>
+                        <div id="edit-units-display">
+                            ${units.map((unit, index) => `
+                                <div class="unit-container">
+                                    <div class="unit-header">
+                                        <div class="unit-title">Unit ${index + 1}</div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Unit</label>
+                                            <input type="text" value="${unit.unit || ''}" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>MFG</label>
+                                            <input type="text" value="${unit.mfg || ''}" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Type</label>
+                                            <input type="text" value="${unit.type || ''}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="section-title">Items (${unit.items ? unit.items.length : 0})</div>
+                                    ${unit.items ? unit.items.map((item, itemIndex) => `
+                                        <div class="item-container">
+                                            <div class="item-header">
+                                                <div class="item-title">Item ${itemIndex + 1}</div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group">
+                                                    <label>Sparepart</label>
+                                                    <input type="text" value="${item.sparepart || ''}" readonly>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Kondisi</label>
+                                                    <input type="text" value="${item.condition || ''}" readonly>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Jumlah</label>
+                                                    <input type="text" value="${item.quantity || ''}" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `).join('') : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div style="margin-top: 30px; text-align: center;">
+                            <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+                            <button type="submit" class="btn btn-success">Update Record</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            
+            modal.style.display = 'flex';
+            
+            // Handle form submission
+            document.getElementById('edit-record-form').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                await updateRecord(recordId);
+            });
+        }
+
+        function reviewRecord(recordId) {
+            const record = currentRecords.find(r => r.__backendId === recordId);
+            if (!record) return;
+            
+            const modal = document.getElementById('review-modal');
+            const container = document.getElementById('review-content');
+            
+            const units = JSON.parse(record.units || '[]');
+            
+            container.innerHTML = `
+                <div class="modal-body">
+                    <div class="review-section">
+                        <div class="review-title">Record Information</div>
+                        <p><strong>Type:</strong> ${record.type.toUpperCase()}</p>
+                        <p><strong>Building:</strong> ${record.building_name}</p>
+                        <p><strong>Technicians:</strong> ${record.technician_names}</p>
+                        <p><strong>Date:</strong> ${record.date}</p>
+                        <p><strong>Submitted:</strong> ${new Date(record.created_at).toLocaleDateString('id-ID')} by ${record.username} (${record.user_type})</p>
+                    </div>
+                    
+                    <div class="review-section">
+                        <div class="review-title">Units Details (${units.length} units)</div>
+                        ${units.map((unit, index) => `
+                            <div class="review-item">
+                                <div class="review-item-title">Unit ${index + 1}: ${unit.unit || 'N/A'}</div>
+                                <p><strong>MFG:</strong> ${unit.mfg || 'N/A'}</p>
+                                <p><strong>Type:</strong> ${unit.type || 'N/A'}</p>
+                                
+                                ${unit.items && unit.items.length > 0 ? `
+                                    <div style="margin-top: 15px;">
+                                        <strong>Items (${unit.items.length}):</strong>
+                                        ${unit.items.map((item, itemIndex) => `
+                                            <div style="margin-left: 20px; margin-top: 10px; padding: 10px; background: rgba(255, 255, 255, 0.05); border-radius: 8px;">
+                                                <p><strong>Item ${itemIndex + 1}:</strong> ${item.sparepart || 'N/A'}</p>
+                                                <p><strong>Condition:</strong> ${item.condition || 'N/A'}</p>
+                                                <p><strong>Quantity:</strong> ${item.quantity || 'N/A'} ${item.unit || ''}</p>
+                                                <p><strong>Remarks:</strong> ${item.remarks || 'N/A'}</p>
+                                                <p><strong>Priority:</strong> ${item.priority || 'N/A'}</p>
+                                                ${item.photos && item.photos.length > 0 ? `
+                                                    <div class="review-photos">
+                                                        ${item.photos.map(photo => `
+                                                            <img src="${photo}" alt="Item Photo" class="review-photo" onclick="openPhotoModal('${photo}')">
+                                                        `).join('')}
+                                                    </div>
+                                                ` : ''}
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                ` : '<p>No items recorded</p>'}
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 30px;">
+                        <button class="btn btn-secondary" onclick="closeReviewModal()">Close</button>
+                        <button class="btn btn-secondary" onclick="downloadPDF('${recordId}')">Download PDF</button>
+                    </div>
+                </div>
+            `;
+            
+            modal.style.display = 'flex';
+        }
+
+        async function updateRecord(recordId) {
+            try {
+                showLoading('Updating record...');
+                
+                const record = currentRecords.find(r => r.__backendId === recordId);
+                if (!record) {
+                    throw new Error('Record not found');
+                }
+                
+                const updatedRecord = {
+                    ...record,
+                    building_name: document.getElementById('edit-building').value,
+                    technician_names: document.getElementById('edit-technicians').value,
+                    date: document.getElementById('edit-date').value
+                };
+                
+                const updateResult = await window.dataSdk.update(updatedRecord);
+                
+                if (!updateResult.isOk) {
+                    throw new Error('Failed to update record: ' + updateResult.error);
+                }
+                
+                showMessage('Record updated successfully!', 'success');
+                closeEditModal();
+                
+            } catch (error) {
+                console.error('Error updating record:', error);
+                showMessage('Error updating record: ' + error.message, 'error');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        function closeEditModal() {
+            document.getElementById('edit-modal').style.display = 'none';
+        }
+
+        function closeReviewModal() {
+            document.getElementById('review-modal').style.display = 'none';
+        }
+
+        function openPhotoModal(photoSrc) {
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.style.zIndex = '10001';
+            modal.innerHTML = `
+                <div style="position: relative; max-width: 90%; max-height: 90%;">
+                    <img src="${photoSrc}" style="width: 100%; height: auto; border-radius: 10px;">
+                    <button onclick="this.parentElement.parentElement.remove()" 
+                            style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 20px;">×</button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function downloadPDF(recordId) {
+            const record = currentRecords.find(r => r.__backendId === recordId);
+            if (!record) return;
+            
+            const units = JSON.parse(record.units || '[]');
+            
+            let content = `PT. JAYA KENCANA - ${record.type.toUpperCase()} REPORT\n\n`;
+            content += `Building: ${record.building_name}\n`;
+            content += `Technicians: ${record.technician_names}\n`;
+            content += `Date: ${record.date}\n`;
+            content += `Submitted: ${new Date(record.created_at).toLocaleDateString('id-ID')} by ${record.username} (${record.user_type})\n\n`;
+            content += `Total Units: ${units.length}\n\n`;
+            
+            units.forEach((unit, unitIndex) => {
+                content += `UNIT ${unitIndex + 1}\n`;
+                content += `Unit: ${unit.unit || 'N/A'}\n`;
+                content += `MFG: ${unit.mfg || 'N/A'}\n`;
+                content += `Type: ${unit.type || 'N/A'}\n\n`;
+                
+                if (unit.items && unit.items.length > 0) {
+                    content += `Items (${unit.items.length}):\n`;
+                    unit.items.forEach((item, itemIndex) => {
+                        content += `  Item ${itemIndex + 1}:\n`;
+                        content += `    Sparepart: ${item.sparepart || 'N/A'}\n`;
+                        content += `    Condition: ${item.condition || 'N/A'}\n`;
+                        content += `    Quantity: ${item.quantity || 'N/A'} ${item.unit || ''}\n`;
+                        content += `    Remarks: ${item.remarks || 'N/A'}\n`;
+                        content += `    Priority: ${item.priority || 'N/A'}\n`;
+                        content += `    Photos: ${item.photos ? item.photos.length : 0} photo(s)\n\n`;
+                    });
+                } else {
+                    content += `No items recorded\n\n`;
+                }
+            });
+            
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${record.type}_${record.building_name}_${record.date}_${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            showMessage('Report downloaded successfully!', 'success');
+        }
+
+        function showLoading(text = 'Loading...') {
+            document.getElementById('loading-text').textContent = text;
+            document.getElementById('loading').style.display = 'flex';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        function showMessage(message, type = 'success') {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = type === 'success' ? 'success-message' : 'error-message';
+            messageDiv.textContent = message;
+            messageDiv.style.position = 'fixed';
+            messageDiv.style.top = '20px';
+            messageDiv.style.right = '20px';
+            messageDiv.style.zIndex = '10000';
+            messageDiv.style.maxWidth = '400px';
+            
+            document.body.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 5000);
+        }
+
+        // Event Listeners
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (login(username, password)) {
+                document.getElementById('login-page').style.display = 'none';
+                document.getElementById('main-app').style.display = 'block';
+                document.getElementById('user-display').textContent = `${currentUser.username} (${currentUser.role})`;
+                document.getElementById('user-subtitle').textContent = `Welcome, ${currentUser.username}`;
+            } else {
+                const errorDiv = document.getElementById('login-error');
+                errorDiv.textContent = 'Invalid username or password';
+                errorDiv.style.display = 'block';
+            }
         });
-        
-        dropdownList.style.display = hasVisibleItems ? 'block' : 'none';
-      }
-    });
-    
-    dropdownItems.forEach(item => {
-      item.addEventListener('click', function() {
-        poinInput.value = this.dataset.value;
-        dropdownList.style.display = 'none';
-      });
-    });
-    
-    // Hide dropdown when clicking outside
-    document.addEventListener('click', function(e) {
-      if (!e.target.closest('.relative')) {
-        dropdownList.style.display = 'none';
-      }
-    });
-    
-// Penilaian Form Handler
-document.getElementById('penilaianForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  
-  const selectedTeknisi = Array.from(document.querySelectorAll('input[name="teknisi"]:checked')).map(cb => cb.value);
-  if (selectedTeknisi.length === 0) {
-    showToast('Pilih minimal satu teknisi!', '#ef4444');
-    return;
-  }
 
-  const poinPenilaian = document.getElementById('poinPenilaian').value;
-  const nilai = parseInt(document.getElementById('nilai').value);
+        document.getElementById('escalator-form-element').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const selectedTechnicians = Array.from(document.querySelectorAll('#escalator-technicians input:checked'))
+                .map(cb => cb.value);
+            
+            if (selectedTechnicians.length === 0) {
+                showMessage('Please select at least one technician', 'error');
+                return;
+            }
+            
+            const units = [];
+            for (let unitId = 1; unitId <= unitCounters.escalator; unitId++) {
+                const unitElement = document.getElementById(`escalator-unit-${unitId}`);
+                if (unitElement) {
+                    const unit = {
+                        unit: formData.get(`escalator_unit_${unitId}`),
+                        mfg: formData.get(`escalator_mfg_${unitId}`),
+                        type: formData.get(`escalator_type_${unitId}`),
+                        items: []
+                    };
+                    
+                    // Collect items for this unit
+                    for (let itemId = 1; itemId <= (itemCounters.escalator[unitId] || 0); itemId++) {
+                        const itemElement = document.getElementById(`escalator-item-${unitId}-${itemId}`);
+                        if (itemElement) {
+                            const item = {
+                                sparepart: formData.get(`escalator_sparepart_${unitId}_${itemId}`),
+                                condition: formData.get(`escalator_condition_${unitId}_${itemId}`),
+                                quantity: formData.get(`escalator_quantity_${unitId}_${itemId}`),
+                                unit: formData.get(`escalator_unit_${unitId}_${itemId}`),
+                                remarks: formData.get(`escalator_remarks_${unitId}_${itemId}`),
+                                priority: formData.get(`escalator_priority_${unitId}_${itemId}`),
+                                photos: []
+                            };
+                            
+                            // Collect photos
+                            const photoInputs = itemElement.querySelectorAll('input[type="hidden"]');
+                            photoInputs.forEach(input => {
+                                if (input.value) {
+                                    item.photos.push(input.value);
+                                }
+                            });
+                            
+                            unit.items.push(item);
+                        }
+                    }
+                    
+                    units.push(unit);
+                }
+            }
+            
+            const data = {
+                id: Date.now().toString(),
+                type: 'escalator',
+                building_name: formData.get('building_name'),
+                technician_names: selectedTechnicians.join(', '),
+                date: formData.get('date'),
+                units: JSON.stringify(units),
+                created_at: new Date().toISOString(),
+                user_type: currentUser.role,
+                username: currentUser.username,
+                photos: JSON.stringify([])
+            };
+            
+            await submitForm('escalator', data);
+        });
 
-  const submitBtn = document.getElementById('submitBtn');
-  submitBtn.classList.add('loading');
-  submitBtn.disabled = true;
+        document.getElementById('elevator-form-element').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const selectedTechnicians = Array.from(document.querySelectorAll('#elevator-technicians input:checked'))
+                .map(cb => cb.value);
+            
+            if (selectedTechnicians.length === 0) {
+                showMessage('Please select at least one technician', 'error');
+                return;
+            }
+            
+            const units = [];
+            for (let unitId = 1; unitId <= unitCounters.elevator; unitId++) {
+                const unitElement = document.getElementById(`elevator-unit-${unitId}`);
+                if (unitElement) {
+                    const unit = {
+                        unit: formData.get(`elevator_unit_${unitId}`),
+                        mfg: formData.get(`elevator_mfg_${unitId}`),
+                        type: formData.get(`elevator_type_${unitId}`),
+                        items: []
+                    };
+                    
+                    // Collect items for this unit
+                    for (let itemId = 1; itemId <= (itemCounters.elevator[unitId] || 0); itemId++) {
+                        const itemElement = document.getElementById(`elevator-item-${unitId}-${itemId}`);
+                        if (itemElement) {
+                            const item = {
+                                sparepart: formData.get(`elevator_sparepart_${unitId}_${itemId}`),
+                                condition: formData.get(`elevator_condition_${unitId}_${itemId}`),
+                                quantity: formData.get(`elevator_quantity_${unitId}_${itemId}`),
+                                unit: formData.get(`elevator_unit_${unitId}_${itemId}`),
+                                remarks: formData.get(`elevator_remarks_${unitId}_${itemId}`),
+                                priority: formData.get(`elevator_priority_${unitId}_${itemId}`),
+                                photos: []
+                            };
+                            
+                            // Collect photos
+                            const photoInputs = itemElement.querySelectorAll('input[type="hidden"]');
+                            photoInputs.forEach(input => {
+                                if (input.value) {
+                                    item.photos.push(input.value);
+                                }
+                            });
+                            
+                            unit.items.push(item);
+                        }
+                    }
+                    
+                    units.push(unit);
+                }
+            }
+            
+            const data = {
+                id: Date.now().toString(),
+                type: 'elevator',
+                building_name: formData.get('building_name'),
+                technician_names: selectedTechnicians.join(', '),
+                date: formData.get('date'),
+                units: JSON.stringify(units),
+                created_at: new Date().toISOString(),
+                user_type: currentUser.role,
+                username: currentUser.username,
+                photos: JSON.stringify([])
+            };
+            
+            await submitForm('elevator', data);
+        });
 
-  for (const teknisi of selectedTeknisi) {
-    const record = {
-      id: Date.now().toString() + Math.random().toString(36).substring(2, 9),
-      username: currentUser,
-      teknisi: teknisi,
-      poin_penilaian: poinPenilaian,
-      nilai: nilai,
-      timestamp: new Date().toISOString()
-    };
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Check authentication
+            if (checkAuth()) {
+                document.getElementById('login-page').style.display = 'none';
+                document.getElementById('main-app').style.display = 'block';
+                document.getElementById('user-display').textContent = `${currentUser.username} (${currentUser.role})`;
+                document.getElementById('user-subtitle').textContent = `Welcome, ${currentUser.username}`;
+            }
+            
+            // Set today's date
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('escalator-date').value = today;
+            document.getElementById('elevator-date').value = today;
+                    });
 
-    await fetch("https://script.google.com/macros/s/AKfycbwFv3rRsdlI-hIbpZuqJmVAQW7uDwPWj__zgB9tlBrnx_seHIVA08dC-elQFF0ak6b42w/exec", {
-      method: "POST",
-      mode: "no-cors", // ✅ Ini fix anti CORS
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(record)
-    });
-  }
+        // Element SDK Configuration
+        const defaultConfig = {
+            company_name: 'PT. JAYA KENCANA',
+            copyright_text: 'Copyright 2025 PT. Jaya Kencana'
+        };
 
-  document.getElementById('penilaianForm').reset();
-  document.querySelectorAll('input[name="teknisi"]').forEach(cb => cb.checked = false);
+        const element = {
+            defaultConfig,
+            onConfigChange: async (config) => {
+                document.getElementById('company-name').textContent = config.company_name || defaultConfig.company_name;
+                document.getElementById('company-header').textContent = config.company_name || defaultConfig.company_name;
+                document.getElementById('copyright-footer').textContent = config.copyright_text || defaultConfig.copyright_text;
+            },
+            mapToCapabilities: (config) => ({
+                recolorables: [],
+                borderables: [],
+                fontEditable: undefined,
+                fontSizeable: undefined
+            }),
+            mapToEditPanelValues: (config) => new Map([
+                ['company_name', config.company_name || defaultConfig.company_name],
+                ['copyright_text', config.copyright_text || defaultConfig.copyright_text]
+            ])
+        };
 
-  submitBtn.classList.remove('loading');
-  submitBtn.disabled = false;
-
-  showToast("Penilaian berhasil disimpan!", "#10b981");
-});
-   
-   // Toast Notification
-    function showToast(message, color) {
-      const toast = document.createElement('div');
-      toast.className = 'toast';
-      toast.style.background = `linear-gradient(135deg, ${color} 0%, ${color}dd 100%)`;
-      toast.textContent = message;
-      document.body.appendChild(toast);
-      
-      setTimeout(() => {
-        toast.remove();
-      }, 3000);
-    }
-    
-    // Initialize on page load
-  </script>
-</body>
+        // Initialize Element SDK
+        if (window.elementSdk) {
+            window.elementSdk.init(element);
+        }
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9962893bc61db58d',t:'MTc2MTczOTQ3My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
