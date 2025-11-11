@@ -1393,28 +1393,6 @@
     }
 }
 
-                // Ambil data lama
-let savedData = JSON.parse(localStorage.getItem('records') || '[]');
-
-// Tambah record baru
-savedData.push(formData);
-
-// Simpan lagi
-localStorage.setItem('records', JSON.stringify(savedData));                
-                if (!createResult.isOk) {
-                    throw new Error('Failed to save data: ' + createResult.error);
-                }
-                
-                showMessage('Form submitted successfully!', 'success');
-                resetForm(type);
-                
-            } catch (error) {
-                console.error('Error submitting form:', error);
-                showMessage('Error submitting form: ' + error.message, 'error');
-            } finally {
-                hideLoading();
-            }
-        }
 
         function renderHistory(searchTerm = '') {
             const historyList = document.getElementById('history-list');
